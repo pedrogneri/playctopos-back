@@ -10,8 +10,8 @@ const searchVideoByQuery = (req, res) => {
       type: 'video',
       key: process.env.API_KEY,
     }
-  }).then((response) => {
-    res.status(200).send(response.data);
+  }).then(({ data: { items }}) => {
+    res.status(200).send(items);
   }).catch((err) => {
     res.status(500).send({ message: `something's wrong: ${err}` });
   });

@@ -5,6 +5,7 @@ const app = express();
 const dotenv = require('dotenv');
 
 dotenv.config();
+const SearchRoutes = require('./routes/Search');
 
 app.use(cors({ origin: true }));
 app.use(express.json());
@@ -16,11 +17,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/', (req, res) => {
-  res.send({ message: "bom dia" });
-});
+app.use('/', SearchRoutes);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, function () {
+app.listen(PORT, () => {
   console.log('Running');
 });

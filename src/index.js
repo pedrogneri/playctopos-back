@@ -33,6 +33,10 @@ io.on('connection', (socket) => {
   socket.on('video.init', ({roomId, initial}) => {
     io.to(roomId).emit('video.init', {roomId: roomId, initial: initial});
   });
+
+  socket.on('room.message', ({roomId, message}) => {
+    io.to(roomId).emit('room.message', {roomId: roomId, message: message});
+  });
 });
 
 const PORT = process.env.PORT || 8080;

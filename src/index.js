@@ -25,6 +25,14 @@ app.use('/', SearchRoutes);
 
 io.on('connection', (socket) => {
   console.log('[IO] New Connection');
+
+  socket.on('room.join', roomId => {
+    socket.join(roomId);
+  });
+
+  socket.on('video.init', ({roomId, initial}) => {
+    io.to(roomId).emit('video.init', {roomId: roomId, initial: initial});
+  });
 });
 
 const PORT = process.env.PORT || 8080;

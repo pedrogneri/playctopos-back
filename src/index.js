@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const cors = require('cors')
 
 const app = express();
@@ -9,6 +10,13 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 const SearchRoutes = require('./routes/Search');
+const RoomRoutes = require('./routes/Room');
+
+mongoose.connect(process.env.DB_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false
+});
 
 app.use(cors({ origin: true }));
 app.use(express.json());
@@ -22,6 +30,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/', SearchRoutes);
+app.use('/', RoomRoutes);
 
 io.on('connection', (socket) => {
   console.log('[IO] New Connection');

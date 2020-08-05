@@ -1,7 +1,5 @@
 const axios = require('axios');
 
-const defaultErrorMessage = (err) => `Internal error: ${err}`;
-
 const getVideoListByQuery = (req, res) => {
   const { query } = req.query;
 
@@ -15,7 +13,7 @@ const getVideoListByQuery = (req, res) => {
   }).then(({ data: { items }}) => {
     res.status(200).send(items);
   }).catch((err) => {
-    res.status(500).send(defaultErrorMessage(err));
+    res.status(500).send(err);
   });
 };
 
@@ -31,7 +29,7 @@ const getVideoById = (req, res) => {
   }).then(({ data: { items: [item, ] }}) => {
     res.status(200).send(item);
   }).catch((err) => {
-    res.status(500).send(defaultErrorMessage(err));
+    res.status(500).send(err);
   });
 };
 

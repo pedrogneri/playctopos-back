@@ -39,8 +39,8 @@ io.on('connection', (socket) => {
     socket.join(roomId);
   });
 
-  socket.on('video.init', ({roomId, initial}) => {
-    io.to(roomId).emit('video.init', {roomId: roomId, initial: initial});
+  socket.on('video.init', ({roomId, actualVideoId, lastPlayDate}) => {
+    io.to(roomId).emit('video.init', {roomId, actualVideoId, lastPlayDate});
   });
 
   socket.on('room.message', ({roomId, message}) => {

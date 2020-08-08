@@ -9,6 +9,7 @@
     "start": "nodemon src/index.js"
   },
   "dependencies": {
+    "app-module-path": "^2.2.0",
     "axios": "^0.19.2",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",

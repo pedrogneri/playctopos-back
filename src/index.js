@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors')
+const cors = require('cors');
 
 const app = express();
 const http = require('http').createServer(app);
@@ -15,7 +15,7 @@ const RoomRoutes = require('./routes/Room');
 mongoose.connect(process.env.DB_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useFindAndModify: false
+  useFindAndModify: false,
 });
 
 app.use(cors({ origin: true }));
@@ -35,16 +35,16 @@ app.use('/', RoomRoutes);
 io.on('connection', (socket) => {
   console.log('[IO] New Connection');
 
-  socket.on('room.join', roomId => {
+  socket.on('room.join', (roomId) => {
     socket.join(roomId);
   });
 
-  socket.on('video.init', ({roomId, actualVideoId, lastPlayDate}) => {
-    io.to(roomId).emit('video.init', {roomId, actualVideoId, lastPlayDate});
+  socket.on('video.init', ({ roomId, actualVideoId, lastPlayDate }) => {
+    io.to(roomId).emit('video.init', { roomId, actualVideoId, lastPlayDate });
   });
 
-  socket.on('room.message', ({roomId, message}) => {
-    io.to(roomId).emit('room.message', {roomId: roomId, message: message});
+  socket.on('room.message', ({ roomId, message }) => {
+    io.to(roomId).emit('room.message', { roomId: roomId, message: message });
   });
 });
 

@@ -6,11 +6,14 @@ const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
+require('app-module-path/register');
+require('app-module-path').addPath(__dirname + '/src');
+
 const dotenv = require('dotenv');
 
 dotenv.config();
-const SearchRoutes = require('./routes/Search');
-const RoomRoutes = require('./routes/Room');
+const SearchRoutes = require('routes/Search');
+const RoomRoutes = require('routes/Room');
 
 mongoose.connect(process.env.DB_URL, {
   useNewUrlParser: true,

@@ -6,7 +6,8 @@
   "author": "pedrogneri <pedrogneri@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
   },
   "dependencies": {
     "app-module-path": "^2.2.0",

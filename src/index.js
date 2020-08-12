@@ -36,14 +36,12 @@ app.use('/', SearchRoutes);
 app.use('/', RoomRoutes);
 
 io.on('connection', (socket) => {
-  console.log('[IO] New Connection');
-
   socket.on('room.join', (roomId) => {
     socket.join(roomId);
   });
 
-  socket.on('video.init', ({ roomId, actualVideoId, lastPlayDate }) => {
-    io.to(roomId).emit('video.init', { roomId, actualVideoId, lastPlayDate });
+  socket.on('video.changeState', (roomId) => {
+    io.to(roomId).emit('video.changeState', roomId);
   });
 
   socket.on('room.message', ({ roomId, message }) => {

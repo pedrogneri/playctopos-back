@@ -32,25 +32,21 @@ const getVideoUrlByRoom = (req, res) => {
 
   Room.findById(id)
     .then((room) => {
-      const videoUrl = generateVideoURL(room);
-      res.status(200).send(videoUrl);
+      const url = generateVideoURL(room);
+      res.status(200).send({ room, url });
     })
     .catch((err) => {
       res.status(500).send(err);
     });
 };
 
-const generateVideoURL = ({ actualVideoId, lastPlayDate }) => {
+const generateVideoURL = ({ actualVideo: { id }, lastPlayDate }) => {
   const videoTime = Math.round((new Date().getTime() - lastPlayDate) / 1000);
 
-  if (actualVideoId !== '' && lastPlayDate !== '') {
-    return {
-      url: `https://www.youtube.com/embed/${actualVideoId}?controls=0&rel=0&cc_load_policy=0&showinfo=0&start=${videoTime}`,
-    };
+  if (id !== '' && lastPlayDate !== '') {
+    return `https://www.youtube.com/embed/${id}?controls=0&rel=0&cc_load_policy=0&showinfo=0&start=${videoTime}`;
   } else {
-    return {
-      url: '',
-    };
+    return '';
   }
 };
 

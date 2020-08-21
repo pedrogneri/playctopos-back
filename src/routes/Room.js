@@ -6,5 +6,6 @@ router.get('/room', RoomController.show);
 router.put('/room', RoomController.update);
 
 router.get('/getVideoUrlByRoom', RoomController.getVideoUrlByRoom);
+router.get('/getRoomByName', RoomController.getRoomByName);
 
 module.exports = router;

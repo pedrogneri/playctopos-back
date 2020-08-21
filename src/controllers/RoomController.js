@@ -27,6 +27,18 @@ const update = (req, res) => {
     });
 };
 
+const getRoomByName = (req, res) => {
+  const { name } = req.query;
+
+  Room.findOne({ name })
+    .then((result) => {
+      res.status(200).send(result);
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+    });
+};
+
 const getVideoUrlByRoom = (req, res) => {
   const { id } = req.query;
 
@@ -54,4 +66,5 @@ module.exports = {
   show,
   update,
   getVideoUrlByRoom,
+  getRoomByName,
 };

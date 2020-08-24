@@ -44,8 +44,16 @@ const getVideoUrlByRoom = (req, res) => {
 
   Room.findById(id)
     .then(async (room) => {
-      const url = await generateVideoURL(room);
-      const newRoom = await Room.findById(id);
+      let newRoom;
+      const nextVideo = room.playlist.length > 0 ? room.playlist[0] : undefined;
+
+      if (room.actualVideo.id === '' && nextVideo) {
+        newRoom = await changeToNextSongAndReturnRoom(room);
+      } else {
+        newRoom = room;
+      }
+
+      const url = generateVideoURL(newRoom);
       res.status(200).send({ room: newRoom, url });
     })
     .catch((err) => {
@@ -54,7 +62,7 @@ const getVideoUrlByRoom = (req, res) => {
     });
 };
 
-const changeToNextSong = async (room) => {
+const changeToNextSongAndReturnRoom = async (room) => {
   const now = new Date().getTime();
   const nextVideo = room.playlist[0];
   const newPlaylist = room.playlist;
@@ -76,24 +84,15 @@ const changeToNextSong = async (room) => {
   return updatedRoom;
 };
 
-const generateVideoURL = async (room) => {
-  const videoTime = calculateActualVideoTime(room.lastPlayDate);
-  const nextVideo = room.playlist.length > 0 ? room.playlist[0] : undefined;
+const generateVideoURL = (room) => {
+  const videoTime = Math.round((new Date().getTime() - room.lastPlayDate) / 1000);
 
   if (room.actualVideo.id !== '' && room.lastPlayDate !== '') {
     return `https://www.youtube.com/embed/${room.actualVideo.id}?controls=0&rel=0&cc_load_policy=0&showinfo=0&start=${videoTime}`;
-  } else if (!!nextVideo) {
-    const newRoom = await changeToNextSong(room);
-
-    return `https://www.youtube.com/embed/${
-      newRoom.actualVideo.id
-    }?controls=0&rel=0&cc_load_policy=0&showinfo=0&start=${calculateActualVideoTime(newRoom.lastPlayDate)}`;
   } else {
     return '';
   }
 };
-
-const calculateActualVideoTime = (lastPlayDate) => Math.round((new Date().getTime() - lastPlayDate) / 1000);
 
 module.exports = {
   show,

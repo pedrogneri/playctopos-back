@@ -1,22 +1,24 @@
 const Room = require('models/Room');
 
-const show = (req, res) => {
+const updateActualVideo = (req, res) => {
   const { id } = req.query;
+  const actualVideo = req.body;
+  const now = new Date().getTime();
+  const updatedRoom = { actualVideo, lastPlayDate: now };
 
-  Room.findById(id)
-    .then((room) => {
-      res.status(200).send(room);
+  Room.findOneAndUpdate({ _id: id }, updatedRoom)
+    .then((result) => {
+      res.status(200).send(result);
     })
     .catch((err) => {
       res.status(500).send(err);
     });
 };
 
-const update = (req, res) => {
+const updatePlaylist = (req, res) => {
   const { id } = req.query;
-  const room = req.body;
-  const now = new Date().getTime();
-  const updatedRoom = { ...room, lastPlayDate: now };
+  const playlist = req.body;
+  const updatedRoom = { playlist };
 
   Room.findOneAndUpdate({ _id: id }, updatedRoom)
     .then((result) => {
@@ -57,7 +59,6 @@ const getVideoUrlByRoom = (req, res) => {
       res.status(200).send({ room: newRoom, url });
     })
     .catch((err) => {
-      console.log(err);
       res.status(500).send(err);
     });
 };
@@ -95,8 +96,8 @@ const generateVideoURL = (room) => {
 };
 
 module.exports = {
-  show,
-  update,
+  updateActualVideo,
+  updatePlaylist,
   getVideoUrlByRoom,
   getRoomByName,
 };

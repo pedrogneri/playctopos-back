@@ -9,6 +9,14 @@ const Room = mongoose.model('Room', {
     channel: String,
     thumbnail: String,
   },
+  playlist: [
+    {
+      id: String,
+      title: String,
+      channel: String,
+      thumbnail: String,
+    },
+  ],
 });
 
 module.exports = Room;

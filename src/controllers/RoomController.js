@@ -3,8 +3,7 @@ const Room = require('models/Room');
 const updateActualVideo = (req, res) => {
   const { id } = req.query;
   const actualVideo = req.body;
-  const now = new Date().getTime();
-  const updatedRoom = { actualVideo, lastPlayDate: now };
+  const updatedRoom = { actualVideo };
 
   Room.findOneAndUpdate({ _id: id }, updatedRoom)
     .then((result) => {
@@ -48,9 +47,15 @@ const getVideoUrlByRoom = (req, res) => {
     .then(async (room) => {
       let newRoom;
       const nextVideo = room.playlist.length > 0 ? room.playlist[0] : undefined;
+      const videoEnded = room.actualVideo.duration && getVideoTime(room.lastPlayDate) >= room.actualVideo.duration;
 
-      if (room.actualVideo.id === '' && nextVideo) {
-        newRoom = await changeToNextSongAndReturnRoom(room);
+      if (videoEnded || room.actualVideo.id === '') {
+        if (nextVideo) {
+          newRoom = await changeToNextSongAndReturnRoom(room);
+        } else {
+          newRoom = room;
+          newRoom.actualVideo = { id: '', thumbnail: '', title: '', channel: '', duration: '' };
+        }
       } else {
         newRoom = room;
       }
@@ -77,6 +82,7 @@ const changeToNextSongAndReturnRoom = async (room) => {
       channel: nextVideo.channel,
       thumbnail: nextVideo.thumbnail,
     },
+    duration: '',
     lastPlayDate: now,
   };
 
@@ -86,7 +92,7 @@ const changeToNextSongAndReturnRoom = async (room) => {
 };
 
 const generateVideoURL = (room) => {
-  const videoTime = Math.round((new Date().getTime() - room.lastPlayDate) / 1000);
+  const videoTime = getVideoTime(room.lastPlayDate);
 
   if (room.actualVideo.id !== '' && room.lastPlayDate !== '') {
     return `https://www.youtube.com/embed/${room.actualVideo.id}?controls=0&rel=0&cc_load_policy=0&showinfo=0&start=${videoTime}`;
@@ -94,6 +100,8 @@ const generateVideoURL = (room) => {
     return '';
   }
 };
+
+const getVideoTime = (lastPlayDate) => Math.round((new Date().getTime() - lastPlayDate) / 1000);
 
 module.exports = {
   updateActualVideo,

@@ -8,6 +8,7 @@ const Room = mongoose.model('Room', {
     title: String,
     channel: String,
     thumbnail: String,
+    duration: String,
   },
   playlist: [
     {
@@ -15,6 +16,7 @@ const Room = mongoose.model('Room', {
       title: String,
       channel: String,
       thumbnail: String,
+      duration: String,
     },
   ],
 });

@@ -76,12 +76,7 @@ const changeToNextSongAndReturnRoom = async (room) => {
 
   const updatedRoom = {
     playlist: newPlaylist,
-    actualVideo: {
-      id: nextVideo.id,
-      title: nextVideo.title,
-      channel: nextVideo.channel,
-      thumbnail: nextVideo.thumbnail,
-    },
+    actualVideo: nextVideo,
     duration: '',
     lastPlayDate: now,
   };

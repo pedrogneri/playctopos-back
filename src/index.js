@@ -14,6 +14,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const SearchRoutes = require('routes/Search');
 const RoomRoutes = require('routes/Room');
+const initSockets = require('controllers/SocketController');
 
 mongoose.connect(process.env.DB_URL, {
   useNewUrlParser: true,
@@ -24,30 +25,9 @@ mongoose.connect(process.env.DB_URL, {
 app.use(cors({ origin: true }));
 app.use(express.json());
 
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, content-type, Authorization');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  next();
-});
-
 app.use('/', SearchRoutes);
 app.use('/', RoomRoutes);
-
-io.on('connection', (socket) => {
-  socket.on('room.join', (roomId) => {
-    socket.join(roomId);
-  });
-
-  socket.on('video.changeState', (roomId) => {
-    io.to(roomId).emit('video.changeState', roomId);
-  });
-
-  socket.on('room.message', ({ roomId, message }) => {
-    io.to(roomId).emit('room.message', { roomId: roomId, message: message });
-  });
-});
+initSockets(io);
 
 const PORT = process.env.PORT || 8080;
 http.listen(PORT, () => {

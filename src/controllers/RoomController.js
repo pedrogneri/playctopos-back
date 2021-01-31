@@ -88,10 +88,10 @@ const changeToNextSongAndReturnRoom = async (room) => {
 
 const generateVideoURL = (room) => {
   const videoTime = getVideoTime(room.lastPlayDate);
-  const params = `controls=0&rel=0&cc_load_policy=0&showinfo=0&start=${videoTime}`;
+  const params = ['controls=0', 'rel=0', 'cc_load_policy=0', 'showinfo=0', `start=${videoTime}`];
 
   if (room.actualVideo.id !== '' && room.lastPlayDate !== '') {
-    return `https://www.youtube.com/embed/${room.actualVideo.id}?${params}`;
+    return `https://www.youtube.com/embed/${room.actualVideo.id}?${params.join('&')}`;
   } else {
     return '';
   }

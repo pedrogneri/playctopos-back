@@ -4,7 +4,7 @@ import {
   getVideoUrlByRoom,
   updateActualVideo,
   updatePlaylist,
-} from 'controllers/RoomController';
+} from '../controllers/RoomController';
 
 const router = Router();
 

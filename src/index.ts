@@ -2,8 +2,8 @@ import 'app-module-path/register';
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import http from 'http'
-import socket from 'socket.io'
+import http from 'http';
+import socket from 'socket.io';
 import dotenv from 'dotenv';
 import SearchRoutes from 'routes/searchRoutes';
 import RoomRoutes from 'routes/roomRoutes';

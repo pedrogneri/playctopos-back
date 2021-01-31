@@ -1,4 +1,4 @@
-import { Server } from 'socket.io'
+import { Server } from 'socket.io';
 
 const initSockets = (io: Server) => {
   io.on('connection', (socket) => {
@@ -11,7 +11,7 @@ const initSockets = (io: Server) => {
     });
 
     socket.on('room.message', ({ roomId, message }) => {
-      io.to(roomId).emit('room.message', { roomId: roomId, message: message });
+      io.to(roomId).emit('room.message', { roomId, message });
     });
   });
 };

@@ -16,4 +16,4 @@ export const VideoSchema: Schema<VideoInterface> = new Schema({
   thumbnail: String,
   duration: Number,
   addedBy: String,
-})
+});

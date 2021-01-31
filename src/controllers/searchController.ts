@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Request, Response } from 'express'
+import { Request, Response } from 'express';
 
 export const getVideoListByQuery = (req: Request, res: Response) => {
   const { query } = req.query;

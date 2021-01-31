@@ -1,5 +1,5 @@
-import Room, { RoomInterface, RoomDocument } from 'models/Room';
-import { Request, Response } from 'express'
+import Room, { RoomDocument, RoomInterface } from 'models/Room';
+import { Request, Response } from 'express';
 
 const updateActualVideo = (req: Request, res: Response) => {
   const { id } = req.query;
@@ -53,11 +53,13 @@ const getVideoUrlByRoom = (req: Request, res: Response) => {
       const videoEnded = actualVideo.duration && getVideoTime(lastPlayDate) >= actualVideo.duration;
 
       if (actualVideo.duration === 0 || videoEnded || actualVideo.id === '') {
-        if (nextVideo) { 
+        if (nextVideo) {
           newRoom = await changeToNextSongAndReturnRoom(room);
         } else {
           newRoom = room;
-          newRoom.actualVideo = { id: '', thumbnail: '', title: '', channel: '', duration: 0, addedBy: '' };
+          newRoom.actualVideo = {
+            id: '', thumbnail: '', title: '', channel: '', duration: 0, addedBy: '',
+          };
         }
       } else {
         newRoom = room;
@@ -94,12 +96,14 @@ const generateVideoURL = (room: Partial<RoomInterface>) => {
 
   if (room.actualVideo.id && room.lastPlayDate) {
     return `https://www.youtube.com/embed/${room.actualVideo.id}?${params.join('&')}`;
-  } else {
-    return '';
   }
+  return '';
 };
 
-const getVideoTime = (lastPlayDate: number) => Math.round((new Date().getTime() - lastPlayDate) / 1000);
+const getVideoTime = (lastPlayDate: number) => {
+  const now = new Date().getTime();
+  return Math.round((now - lastPlayDate) / 1000);
+};
 
 export {
   updateActualVideo,

@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { 
-  updateActualVideo,
-  updatePlaylist,
+import {
   getRoomByName,
   getVideoUrlByRoom,
+  updateActualVideo,
+  updatePlaylist,
 } from 'controllers/RoomController';
 
 const router = Router();

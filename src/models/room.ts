@@ -1,4 +1,4 @@
-import { model, Schema, Document } from 'mongoose';
+import { Document, model, Schema } from 'mongoose';
 import { VideoInterface, VideoSchema } from 'models/video';
 
 export interface RoomInterface {

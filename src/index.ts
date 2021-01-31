@@ -1,9 +1,4 @@
-/* eslint-disable import/first */
 import 'app-module-path/register';
-import { addPath } from 'app-module-path';
-
-addPath(`${__dirname}/src`);
-
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';

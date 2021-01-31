@@ -1,7 +1,7 @@
 import Room, { RoomDocument, RoomInterface } from 'models/Room';
 import { Request, Response } from 'express';
 
-const updateActualVideo = (req: Request, res: Response) => {
+export const updateActualVideo = (req: Request, res: Response) => {
   const { id } = req.query;
   const actualVideo = req.body;
   const updatedRoom = { actualVideo };
@@ -15,7 +15,7 @@ const updateActualVideo = (req: Request, res: Response) => {
     });
 };
 
-const updatePlaylist = (req: Request, res: Response) => {
+export const updatePlaylist = (req: Request, res: Response) => {
   const { id } = req.query;
   const playlist = req.body;
   const updatedRoom = { playlist };
@@ -29,7 +29,7 @@ const updatePlaylist = (req: Request, res: Response) => {
     });
 };
 
-const getRoomByName = (req: Request, res: Response) => {
+export const getRoomByName = (req: Request, res: Response) => {
   const name = req.query.name as string;
 
   Room.findOne({ name })
@@ -41,7 +41,7 @@ const getRoomByName = (req: Request, res: Response) => {
     });
 };
 
-const getVideoUrlByRoom = (req: Request, res: Response) => {
+export const getVideoUrlByRoom = (req: Request, res: Response) => {
   const { id } = req.query;
 
   Room.findById(id)
@@ -103,11 +103,4 @@ const generateVideoURL = (room: Partial<RoomInterface>) => {
 const getVideoTime = (lastPlayDate: number) => {
   const now = new Date().getTime();
   return Math.round((now - lastPlayDate) / 1000);
-};
-
-export {
-  updateActualVideo,
-  updatePlaylist,
-  getVideoUrlByRoom,
-  getRoomByName,
 };

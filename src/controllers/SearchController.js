@@ -9,6 +9,7 @@ const getVideoListByQuery = (req, res) => {
         q: query,
         part: 'snippet',
         type: 'video',
+        maxResults: 20,
         key: process.env.API_KEY,
       },
     })

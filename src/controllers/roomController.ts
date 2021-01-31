@@ -47,11 +47,13 @@ const getVideoUrlByRoom = (req: Request, res: Response) => {
   Room.findById(id)
     .then(async (room: RoomDocument) => {
       let newRoom: Partial<RoomInterface>;
-      const nextVideo = room.playlist.length > 0 ? room.playlist[0] : undefined;
-      const videoEnded = room.actualVideo.duration && getVideoTime(room.lastPlayDate) >= room.actualVideo.duration;
+      const { playlist, actualVideo, lastPlayDate } = room;
 
-      if (videoEnded || room.actualVideo.id === '') {
-        if (nextVideo) {
+      const nextVideo = playlist.length > 0 ? playlist[0] : undefined;
+      const videoEnded = actualVideo.duration && getVideoTime(lastPlayDate) >= actualVideo.duration;
+
+      if (actualVideo.duration === 0 || videoEnded || actualVideo.id === '') {
+        if (nextVideo) { 
           newRoom = await changeToNextSongAndReturnRoom(room);
         } else {
           newRoom = room;

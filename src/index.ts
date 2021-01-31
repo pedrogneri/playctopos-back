@@ -1,6 +1,4 @@
-require('app-module-path/register');
-require('app-module-path').addPath(__dirname + '/src');
-
+import 'app-module-path/register';
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';

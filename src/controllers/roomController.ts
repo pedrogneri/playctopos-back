@@ -1,4 +1,4 @@
-import Room, { RoomDocument, RoomInterface } from 'models/Room';
+import Room, { RoomDocument, RoomInterface } from 'models/room';
 import { Request, Response } from 'express';
 
 export const updateActualVideo = (req: Request, res: Response) => {

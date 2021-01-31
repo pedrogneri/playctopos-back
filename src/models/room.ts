@@ -17,4 +17,6 @@ export const RoomSchema: Schema<RoomInterface> = new Schema({
   playlist: [VideoSchema],
 });
 
-export default model<RoomDocument>('Room', RoomSchema);
+const RoomModel = model<RoomDocument>('Room', RoomSchema);
+
+export default RoomModel;

@@ -1,13 +1,5 @@
 import { model, Schema, Document } from 'mongoose';
-
-export interface VideoInterface {
-  id: string,
-  title: string,
-  channel: string,
-  thumbnail: string,
-  duration?: number,
-  addedBy?: string,
-}
+import { VideoInterface, VideoSchema } from 'models/video';
 
 export interface RoomInterface {
   name: string,
@@ -17,15 +9,6 @@ export interface RoomInterface {
 }
 
 export interface RoomDocument extends RoomInterface, Document {}
-
-const VideoSchema: Schema<VideoInterface> = new Schema({
-  id: String,
-  title: String,
-  channel: String,
-  thumbnail: String,
-  duration: Number,
-  addedBy: String,
-})
 
 export const RoomSchema: Schema<RoomInterface> = new Schema({
   name: String,

@@ -11,6 +11,7 @@
     "lint": "eslint src/"
   },
   "dependencies": {
+    "@types/app-module-path": "^2.2.0",
     "@types/cors": "^2.8.9",
     "@types/express": "^4.17.11",
     "@types/mongoose": "^5.10.3",

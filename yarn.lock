@@ -59,6 +59,11 @@
     "@nodelib/fs.scandir" "2.1.4"
     fastq "^1.6.0"
 
+"@types/app-module-path@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@types/app-module-path/-/app-module-path-2.2.0.tgz#f4172141ad06df563902613af6dae8e0c1cb3b83"
+  integrity sha512-r47Kt3ApJDzUU2xCNzaBI25Au5Xfdvf0Gyomveqvg46nQ3J4PaDLicObhyX6cMhvMVWJMB/BnkXdv1E4zxP+6w==
+
 "@types/body-parser@*":
   version "1.19.0"
   resolved "https://registry.yarnpkg.com/@types/body-parser/-/body-parser-1.19.0.tgz#0685b3c47eb3006ffed117cdd55164b61f80538f"

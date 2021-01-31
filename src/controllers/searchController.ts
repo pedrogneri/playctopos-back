@@ -1,6 +1,7 @@
-const axios = require('axios');
+import axios from 'axios';
+import { Request, Response } from 'express';
 
-const getVideoListByQuery = (req, res) => {
+export const getVideoListByQuery = (req: Request, res: Response) => {
   const { query } = req.query;
 
   axios
@@ -21,7 +22,7 @@ const getVideoListByQuery = (req, res) => {
     });
 };
 
-const getVideoById = (req, res) => {
+export const getVideoById = (req: Request, res: Response) => {
   const { id } = req.query;
 
   axios
@@ -44,9 +45,4 @@ const getVideoById = (req, res) => {
     .catch((err) => {
       res.status(500).send(err);
     });
-};
-
-module.exports = {
-  getVideoListByQuery,
-  getVideoById,
 };

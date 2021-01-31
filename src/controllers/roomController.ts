@@ -1,6 +1,7 @@
-const Room = require('models/Room');
+import Room, { RoomDocument, RoomInterface } from 'models/Room';
+import { Request, Response } from 'express';
 
-const updateActualVideo = (req, res) => {
+const updateActualVideo = (req: Request, res: Response) => {
   const { id } = req.query;
   const actualVideo = req.body;
   const updatedRoom = { actualVideo };
@@ -14,7 +15,7 @@ const updateActualVideo = (req, res) => {
     });
 };
 
-const updatePlaylist = (req, res) => {
+const updatePlaylist = (req: Request, res: Response) => {
   const { id } = req.query;
   const playlist = req.body;
   const updatedRoom = { playlist };
@@ -28,8 +29,8 @@ const updatePlaylist = (req, res) => {
     });
 };
 
-const getRoomByName = (req, res) => {
-  const { name } = req.query;
+const getRoomByName = (req: Request, res: Response) => {
+  const name = req.query.name as string;
 
   Room.findOne({ name })
     .then((result) => {
@@ -40,21 +41,25 @@ const getRoomByName = (req, res) => {
     });
 };
 
-const getVideoUrlByRoom = (req, res) => {
+const getVideoUrlByRoom = (req: Request, res: Response) => {
   const { id } = req.query;
 
   Room.findById(id)
-    .then(async (room) => {
-      let newRoom;
-      const nextVideo = room.playlist.length > 0 ? room.playlist[0] : undefined;
-      const videoEnded = room.actualVideo.duration && getVideoTime(room.lastPlayDate) >= room.actualVideo.duration;
+    .then(async (room: RoomDocument) => {
+      let newRoom: Partial<RoomInterface>;
+      const { playlist, actualVideo, lastPlayDate } = room;
 
-      if (videoEnded || room.actualVideo.id === '') {
+      const nextVideo = playlist.length > 0 ? playlist[0] : undefined;
+      const videoEnded = actualVideo.duration && getVideoTime(lastPlayDate) >= actualVideo.duration;
+
+      if (actualVideo.duration === 0 || videoEnded || actualVideo.id === '') {
         if (nextVideo) {
           newRoom = await changeToNextSongAndReturnRoom(room);
         } else {
           newRoom = room;
-          newRoom.actualVideo = { id: '', thumbnail: '', title: '', channel: '', duration: '' };
+          newRoom.actualVideo = {
+            id: '', thumbnail: '', title: '', channel: '', duration: 0, addedBy: '',
+          };
         }
       } else {
         newRoom = room;
@@ -68,16 +73,15 @@ const getVideoUrlByRoom = (req, res) => {
     });
 };
 
-const changeToNextSongAndReturnRoom = async (room) => {
+const changeToNextSongAndReturnRoom = async (room: RoomDocument) => {
   const now = new Date().getTime();
   const nextVideo = room.playlist[0];
   const newPlaylist = room.playlist;
   newPlaylist.shift();
 
-  const updatedRoom = {
+  const updatedRoom: Partial<RoomInterface> = {
     playlist: newPlaylist,
     actualVideo: nextVideo,
-    duration: '',
     lastPlayDate: now,
   };
 
@@ -86,20 +90,22 @@ const changeToNextSongAndReturnRoom = async (room) => {
   return updatedRoom;
 };
 
-const generateVideoURL = (room) => {
+const generateVideoURL = (room: Partial<RoomInterface>) => {
   const videoTime = getVideoTime(room.lastPlayDate);
   const params = ['controls=0', 'rel=0', 'cc_load_policy=0', 'showinfo=0', `start=${videoTime}`];
 
-  if (room.actualVideo.id !== '' && room.lastPlayDate !== '') {
+  if (room.actualVideo.id && room.lastPlayDate) {
     return `https://www.youtube.com/embed/${room.actualVideo.id}?${params.join('&')}`;
-  } else {
-    return '';
   }
+  return '';
 };
 
-const getVideoTime = (lastPlayDate) => Math.round((new Date().getTime() - lastPlayDate) / 1000);
+const getVideoTime = (lastPlayDate: number) => {
+  const now = new Date().getTime();
+  return Math.round((now - lastPlayDate) / 1000);
+};
 
-module.exports = {
+export {
   updateActualVideo,
   updatePlaylist,
   getVideoUrlByRoom,

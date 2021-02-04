@@ -1,4 +1,10 @@
 import { Server } from 'socket.io';
+import { Message } from 'models/message';
+
+type RoomMessageArgs = {
+  roomId: string;
+  message: Message;
+}
 
 const initSockets = (io: Server) => {
   io.on('connection', (socket) => {
@@ -10,7 +16,7 @@ const initSockets = (io: Server) => {
       io.to(roomId).emit('video.changeState', roomId);
     });
 
-    socket.on('room.message', ({ roomId, message }) => {
+    socket.on('room.message', ({ roomId, message }: RoomMessageArgs) => {
       io.to(roomId).emit('room.message', { roomId, message });
     });
   });

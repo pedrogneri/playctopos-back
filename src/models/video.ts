@@ -9,6 +9,30 @@ export interface VideoInterface {
   addedBy?: string,
 }
 
+interface YoutubeThumb {
+  url: string,
+  width: number,
+  height: number
+}
+
+export interface YoutubeVideo {
+  id: { videoId: string },
+  snippet: {
+    title: string,
+    description: string,
+    thumbnails: {
+      default: YoutubeThumb,
+      medium: YoutubeThumb,
+      high: YoutubeThumb,
+    },
+    channelTitle: string,
+  }
+}
+
+export interface YoutubeSearchResponse {
+  items: YoutubeVideo[];
+}
+
 export const VideoSchema: Schema<VideoInterface> = new Schema({
   id: String,
   title: String,

@@ -1,11 +1,29 @@
 import axios from 'axios';
 import { Request, Response } from 'express';
+import { VideoInterface, YoutubeSearchResponse, YoutubeVideo } from 'models/video';
+
+const youtubeAPI = axios.create({
+  baseURL: 'https://www.googleapis.com/youtube/v3',
+});
+
+const convertYoutubeVideoToVideo = (video: YoutubeVideo): VideoInterface => (
+  {
+    id: video.id.videoId,
+    title: video.snippet.title,
+    channel: video.snippet.channelTitle,
+    thumbnail: video.snippet.thumbnails.medium.url,
+  }
+);
+
+const convertResponseToVideoList = (results: YoutubeVideo[]) => (
+  results.map(youtubeVideo => convertYoutubeVideoToVideo(youtubeVideo))
+);
 
 export const getVideoListByQuery = (req: Request, res: Response) => {
   const { query } = req.query;
 
-  axios
-    .get('https://www.googleapis.com/youtube/v3/search', {
+  youtubeAPI
+    .get<YoutubeSearchResponse>('/search', {
       params: {
         q: query,
         part: 'snippet',
@@ -15,7 +33,8 @@ export const getVideoListByQuery = (req: Request, res: Response) => {
       },
     })
     .then(({ data: { items } }) => {
-      res.status(200).send(items);
+      const convertedResults = convertResponseToVideoList(items);
+      res.status(200).send(convertedResults);
     })
     .catch((err) => {
       res.status(500).send(err);
@@ -25,8 +44,8 @@ export const getVideoListByQuery = (req: Request, res: Response) => {
 export const getVideoById = (req: Request, res: Response) => {
   const { id } = req.query;
 
-  axios
-    .get('https://www.googleapis.com/youtube/v3/videos', {
+  youtubeAPI
+    .get<YoutubeSearchResponse>('/videos', {
       params: {
         id,
         part: 'snippet',
@@ -39,7 +58,8 @@ export const getVideoById = (req: Request, res: Response) => {
           items: [item],
         },
       }) => {
-        res.status(200).send(item);
+        const convertedVideo = convertYoutubeVideoToVideo(item);
+        res.status(200).send(convertedVideo);
       },
     )
     .catch((err) => {
